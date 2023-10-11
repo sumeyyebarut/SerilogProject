@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,40 +16,26 @@ namespace SerilogProject.Controllers
             this.logger = logger;
         }
 
-        // GET: api/<HomeController>
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public int GetResult(int number1,int number2)
         {
-            logger.LogError("get method error");//burada log detayını
-                                                  //GET sumeyye-serilog-project/_search diyerek görüntüleyebiliriz.
-            return new string[] { "value1", "value2" };
+            int result = 0;
+            
+            try
+            {
+                var user = new { Name = "Sumeyye", Surname = "Barut" };
+
+                Log.Information("{@user} trying to divide {number1} by {number2}",user,number1,number2);
+                
+                result = number1 / number2;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Something went wrong while dividing {number1} by {number2} ",number1,number2 );
+            }
+            return result;
         }
 
-        // GET api/<HomeController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<HomeController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<HomeController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<HomeController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-       
-       
     }
 }
